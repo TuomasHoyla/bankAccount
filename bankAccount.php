@@ -27,7 +27,7 @@ class BankAccount {
 		}
 
 		if ($this->validateBank($number)) {
-		     throw new Exception('Unknown bank');
+			throw new Exception('Unknown bank');
 	  }
 
 		$number = $this->translateAccountNumberTo14Base($number);
@@ -109,5 +109,5 @@ $finnishTypebNumber = new BankAccount('423456-781');
 	//$notValidAccountNumber = new BankAccount('11033-1537');
 	//$notValidAccountNumber = new BankAccount('1103355-1537');
 	//$notValidAccountNumberCheckSum = new BankAccount('110335-12345678');
-	
+
 var_dump($finnishTypeaNumber->getLongAccountNumber());
