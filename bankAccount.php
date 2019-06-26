@@ -23,21 +23,18 @@ class BankAccount {
 	private function setAccount($number) {
 
 		if (! $this->validateNumber($number)) {
-		     throw new Exception(
-				 'Invalid account number: ' . $number
-			 );}
+			throw new Exception('Invalid account number: ' . $number);
+		}
 
 		if ($this->validateBank($number)) {
-		     throw new Exception(
-                'Unknown bank'
-			 );}
+		     throw new Exception('Unknown bank');
+	  }
 
 		$number = $this->translateAccountNumberTo14Base($number);
 
 		if (! $this->hasValidChecksum($number)) {
-			throw new Exception(
-                'Checksum calculation failed'
-			 );}
+			throw new Exception('Checksum calculation failed');
+		}
 
 		$this->number = $number;
 	}
@@ -56,14 +53,9 @@ class BankAccount {
 		$latterPart = substr($number, strpos($number, "-") + 1);
 
 		if ($this->accountIsBType($number)) {
-			return $firstPart .
-				$latterPart[0] .
-				$this->getZeros($latterPart) .
-				substr($latterPart, 1);
+			return $firstPart . $latterPart[0] . $this->getZeros($latterPart) . substr($latterPart, 1);
 		} else {
-			return $firstPart .
-				$this->getZeros($latterPart) .
-				$latterPart;
+			return $firstPart . $this->getZeros($latterPart) . $latterPart;
 		}
 	}
 
@@ -85,7 +77,7 @@ class BankAccount {
 
 		for ($i = 0; $i < strlen($numbers); $i++) {
 
-		$weightedData[] = ($weights[$i] * $numbers[$i]);
+			$weightedData[] = ($weights[$i] * $numbers[$i]);
 
 		}
 
@@ -109,10 +101,13 @@ class BankAccount {
 
 $finnishTypeaNumber = new BankAccount('123456-785');
 $finnishTypebNumber = new BankAccount('423456-781');
-//$notValidAccountNumber = new BankAccount('110335-1537');
-//$notValidAccountNumber = new BankAccount('110335A1537');
-//$notValidAccountNumber = new BankAccount('110335-1537C');
-//$notValidAccountNumber = new BankAccount('11033-1537');
-//$notValidAccountNumber = new BankAccount('1103355-1537');
-//$notValidAccountNumberCheckSum = new BankAccount('110335-12345678');
+
+//Failing tests:
+	//$notValidAccountNumber = new BankAccount('110335-1537');
+	//$notValidAccountNumber = new BankAccount('110335A1537');
+	//$notValidAccountNumber = new BankAccount('110335-1537C');
+	//$notValidAccountNumber = new BankAccount('11033-1537');
+	//$notValidAccountNumber = new BankAccount('1103355-1537');
+	//$notValidAccountNumberCheckSum = new BankAccount('110335-12345678');
+	
 var_dump($finnishTypeaNumber->getLongAccountNumber());
