@@ -73,17 +73,12 @@ class BankAccount {
 	}
 	
 	private function getWeightedData($numbers, $weights) {
-		return array_map(
-			function ($item, $key) use ($numbers, $weights) {
-			return $numbers[$key] * $weights[$key];
-		}, 
-			$this->getFixedLenghtArray($numbers), 
-			array_keys($this->getFixedLenghtArray($numbers))
+		return array_map(function ($number, $weight) { 
+				return $number * $weight;
+			}, 
+			str_split($numbers), 
+			str_split($weights)
 		);
-	}
-	
-	private function getFixedLenghtArray($string) {
-		return array_fill(0, strlen($string), NULL);
 	}
 		
 	private function calculateCheckSum($data) {
