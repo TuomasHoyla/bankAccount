@@ -22,11 +22,11 @@ class BankAccount {
 
 	private function setAccount($number) {
 
-		if (! $this->validateNumber($number)) {
+		if (! $this->validAccountNumber($number)) {
 			throw new Exception('Invalid account number: ' . $number);
 		}
 
-		if ($this->validateBank($number)) {
+		if ($this->invalidBank($number)) {
 			throw new Exception('Unknown bank');
 	  }
 
@@ -39,11 +39,11 @@ class BankAccount {
 		$this->number = $number;
 	}
 
-	private function validateNumber($number) {
+	private function validAccountNumber($number) {
 		return preg_match(self::ACCOUNT_NUMBER_PATTERN, $number);
 	}
 
-	private function validateBank($number) {
+	private function invalidBank($number) {
 		return in_array($number[0], self::UNKNOWN_BANK_NUMBER_IDS);
 	}
 
@@ -86,11 +86,10 @@ class BankAccount {
 			if ($item >= 10) {
 				$carry += (int) substr($item, 0, 1);
 				$carry += (int) substr($item, 1, 2);
-				return $carry;
 			} else {
 				$carry += $item;
-    			return $carry;
 			}
+			return $carry;
 		});
 
 		$checkSum = ceil($checksumSum / 10) * 10 - $checksumSum;
