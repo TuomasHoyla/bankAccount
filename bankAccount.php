@@ -16,10 +16,6 @@ class BankAccount {
 		return $this->number;
 	}
 
-	public function getIbanAccountNumber() {
-		//todo
-	}
-
 	private function setAccount($number) {
 
 		if (! $this->validAccountNumber($number)) {
@@ -68,33 +64,44 @@ class BankAccount {
 	}
 
 	private function hasValidChecksum($number) {
+		
+		$weightedData = $this->getWeightedData(substr($number,0, 13), (str_repeat('21', 6) . 2));
+			
+		$checksumSum = $this->calculateCheckSum($weightedData);
 
-		$numbers = substr($number,0, 13);
-
-		$weights = str_repeat('21', 6) . 2;
-
-		$weightedData = [];
-
-		for ($i = 0; $i < strlen($numbers); $i++) {
-
-			$weightedData[] = ($weights[$i] * $numbers[$i]);
-
-		}
-
-		$checksumSum = array_reduce($weightedData, function($carry, $item){
+		return $this->getCheckSum($checksumSum) === (int) $number[strlen($number)-1];
+	}
+	
+	private function getWeightedData($numbers, $weights) {
+		return array_map(
+			function ($item, $key) use ($numbers, $weights) {
+			return $numbers[$key] * $weights[$key];
+		}, 
+			$this->getFixedLenghtArray($numbers), 
+			array_keys($this->getFixedLenghtArray($numbers))
+		);
+	}
+	
+	private function getFixedLenghtArray($string) {
+		return array_fill(0, strlen($string), NULL);
+	}
+		
+	private function calculateCheckSum($data) {
+		
+		return array_reduce($data, function($sum, $item){
 
 			if ($item >= 10) {
-				$carry += (int) substr($item, 0, 1);
-				$carry += (int) substr($item, 1, 2);
+				$sum += (int) substr($item, 0, 1);
+				$sum += (int) substr($item, 1, 2);
 			} else {
-				$carry += $item;
+				$sum += $item;
 			}
-			return $carry;
+			return $sum;
 		});
-
-		$checkSum = ceil($checksumSum / 10) * 10 - $checksumSum;
-
-		return (int) $checkSum === (int) $number[strlen($number)-1];
+	}
+	
+	private function getCheckSum($checksumSum) {
+		return (int) ceil($checksumSum / 10) * 10 - $checksumSum;
 	}
 }
 
