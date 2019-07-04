@@ -73,6 +73,7 @@ class BankAccount {
 	}
 	
 	private function getWeightedData($numbers, $weights) {
+		
 		return array_map(function ($number, $weight) { 
 				return $number * $weight;
 			}, 
@@ -84,14 +85,7 @@ class BankAccount {
 	private function calculateCheckSum($data) {
 		
 		return array_reduce($data, function($sum, $item){
-
-			if ($item >= 10) {
-				$sum += (int) substr($item, 0, 1);
-				$sum += (int) substr($item, 1, 2);
-			} else {
-				$sum += $item;
-			}
-			return $sum;
+			return $sum + ($item >= 10 ? (int) substr($item, 0, 1) + (int) substr($item, 1, 2) : $item);
 		});
 	}
 	
